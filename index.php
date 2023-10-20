@@ -72,12 +72,12 @@ include_once('app/database/conection.php');
                                 <div class="col-12">
                                     <!-- Tipo de Vehiculo -->
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="" value="carro" required name="tipo_vehiculo">
-                                        <label class="form-check-label" for="">Carro</label>
+                                        <input class="form-check-input" type="radio" id="carro" value="carro" required name="tipo_vehiculo">
+                                        <label class="form-check-label" for="carro">Carro</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="" value="moto" required name="tipo_vehiculo">
-                                        <label class="form-check-label" for="">Moto</label>
+                                        <input class="form-check-input" type="radio" id="moto" value="moto" required name="tipo_vehiculo">
+                                        <label class="form-check-label" for="moto">Moto</label>
                                     </div>
                                 </div>
                                 <div class="col-12 zonesSelect">
@@ -161,6 +161,14 @@ include_once('app/database/conection.php');
                 var newSelect = $('<select class="form-select js-example-basic-single" aria-label="Default select example" required name="zona[]"></select>');
                 newSelect.append('<option selected>Escoge una zona</option>');
 
+                var checkboxContainer = $('<div class="col-12"></div>');
+                var newCheckbox = $('<label><input type="checkbox" class="form-check-input applyIncrease" title="Aplicar aumento del 66%" /> Lluvia</label>');
+                checkboxContainer.append(newCheckbox);
+
+                var transportCheckboxContainer = $('<div class="col-12"></div>');
+                var transportCheckbox = $('<label><input type="checkbox" class="form-check-input transportCheck" title="Aplicar texto Transporte" /> Transporte</label>');
+                transportCheckboxContainer.append(transportCheckbox);
+
                 <?php
                 $query = "SELECT * FROM tbl_zones ORDER BY zona ASC";
                 $result_tasks = mysqli_query($conn, $query);
@@ -169,6 +177,8 @@ include_once('app/database/conection.php');
                 }
                 ?>
                 selectContainer.append(newSelect);
+                selectContainer.append(checkboxContainer);
+                selectContainer.append(transportCheckboxContainer);
 
                 // Crea un contenedor para el botón de eliminar
                 var buttonContainer = $('<div class="col-1"></div>');
@@ -222,16 +232,38 @@ include_once('app/database/conection.php');
                     var zoneText = $('select[name="zona[]"] option[value="' + selectedValue + '"]').first().text();
                     var monto = getMontoForZone(selectedValue);
 
+                    // Si el checkbox asociado está marcado, aumenta el monto en un 66%
+                    var isChecked = $(this).closest('.zoneContainer').find('.applyIncrease').is(':checked');
+                    if (isChecked) {
+                        monto *= 1.66;
+                    }
+
+                    var montoText = formatCurrency(monto);
+
+                    // Si el checkbox "Transporte" asociado está marcado, añade el texto " Transporte" junto al monto
+                    var isTransportChecked = $(this).closest('.zoneContainer').find('.transportCheck').is(':checked');
+                    if (isTransportChecked) {
+                        montoText += " Transporte";
+                    }
+
                     totalMonto += parseFloat(monto); // Asegúrate de sumar como número flotante
 
                     // Añade una fila a la tabla para cada zona seleccionada con el monto formateado
-                    $('.resumenMontoZona').append('<tr><td>' + zoneText + '</td><td>' + formatCurrency(monto) + '</td></tr>');
+                    $('.resumenMontoZona').append('<tr><td>' + zoneText + '</td><td>' + montoText + '</td></tr>');
                 }
             });
 
             // Actualiza el total en el tfoot con el monto formateado
             $('.totalMonto').text(formatCurrency(totalMonto));
         }
+
+        $(document).on('change', '.applyIncrease', function() {
+            updateTotalMontoZona();
+        });
+
+        $(document).on('change', '.transportCheck', function() {
+            updateTotalMontoZona();
+        });
 
         // Escucha el evento change en los botones de opción de tipo de vehículo
         $(document).on('change', 'input[name="tipo_vehiculo"]', function() {

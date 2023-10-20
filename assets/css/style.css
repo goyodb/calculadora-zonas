@@ -13,6 +13,10 @@
   scroll-behavior: smooth;
 }
 
+.select2 {
+  width: 100% !important;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   background: #f6f9ff;
