@@ -117,12 +117,41 @@ include_once('app/database/conection.php');
                                         </tr>
                                     </tfoot>
                                 </table>
-                                <!-- boton imprimir -->
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-primary d-print-none" onclick="window.print();"><i class="bi bi-printer"></i> Imprimir</button>
-                                </div>
                             </div>
 
+                            <!-- Campo para añadir alguna observación -->
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <!-- Nombre Completo -->
+                                    <label for="nombre_completo" class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" id="nombre_completo" required>
+                                </div>
+                                <div class="col-6">
+                                    <!-- Rango de Fechas -->
+                                    <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+                                    <input type="date" class="form-control" id="fecha_inicio" required>
+                                </div>
+                                <div class="col-6">
+                                    <!-- Rango de Fechas -->
+                                    <label for="fecha_fin" class="form-label">Fecha Fin</label>
+                                    <input type="date" class="form-control" id="fecha_fin" required>
+                                </div>
+                                <div class="col-12">
+                                    <!-- Fecha de hoy en php -->
+                                    <label for="fecha_hoy" class="form-label">Fecha de Hoy</label>
+                                    <input type="date" class="form-control" id="fecha_hoy" value="<?php echo date("Y-m-d"); ?>" readonly>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mt-3">
+                                        <label for="observaciones" class="form-label">Observaciones</label>
+                                        <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- boton imprimir -->
+                            <div class="d-grid gap-2 mt-3">
+                                <button class="btn btn-primary d-print-none" onclick="window.print();"><i class="bi bi-printer"></i> Imprimir</button>
+                            </div>
                         </div>
                     </div>
                 </div>
